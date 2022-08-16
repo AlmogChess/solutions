@@ -81,10 +81,10 @@ def append_df_to_excel(filename, df, sheet_name='Sheet', startrow=None,
     # save the workbook
     writer.save()
 
-A = "Almog Alyona Alex Yossi"
+A = "DATA DATA DATA"
 A = A.split(" ")
 
-ex = ["SaturDay", "FriDay"]
+ex = ["DATA", "DATA"]
 data = [[A[3], A[0]], [A[1], A[0]]]
 
 df = pd.DataFrame(data, columns=ex)
