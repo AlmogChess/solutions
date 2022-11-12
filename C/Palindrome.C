@@ -1,39 +1,36 @@
-#include <stdio.h>
-#include <ctype.h>
-
-int main()
+int Palindrome(char *s)
 {
-	char s[] = "Madam! I'm Adam";
-	int j = 0;
+	char s1[] = "Madam! I'm Adam";
 
-	while (s[j] != NULL)
+	size_t i = 0, size = 0, counter = 0, notalpha = 0;
+	
+	size = strlen(s1) - 1;
+
+	for (i = 0; i < size; ++i)
 	{
-		printf("%c when j = %d \n", s[j], j);
-		j = j + 1;
-	}
-
-	j = j - 1;
-
-	int cpyj = j;
-	printf("%d \n", cpyj);
-
-	for (int i = 0; i < cpyj; i++)
-	{
-		    s[i] = tolower(s[i]);
-	}
-
-	for (int i = 0; i < cpyj; i++)
-	{
-		if ((((s[i] >= 64)  && (s[i] <= 90)) || ((s[i] >= 97) && (s[i] <= 122))) && 
-		(((s[cpyj] >= 64)  && (s[cpyj] <= 90)) || ((s[cpyj] >= 97) && (s[cpyj] <= 122))))
+	
+		if ((0 != isalpha(s1[i])) && (0 != isalpha(s1[size-i])))
 		{
-		if (s[i] != s[cpyj])
+			if ((tolower(s1[size-i])) == (tolower(s1[i])))
+			{
+				++counter;
+			}
+			else
+			{
+				printf("No, for %d ! %d \n", tolower(s1[size-i]), tolower(s1[i]));
+			}
+		}
+		else
 		{
-			printf("this is not Palindrome char");
-			printf("%c : %c \n", s[i], s[cpyj]);
+			++notalpha;
 		}
-		}
-
-		cpyj = cpyj - 1;
 	}
+	
+	if ((counter) == (size - notalpha))
+	{
+		printf("yes\n");
+		return 1;
+	}
+		
+	return 0;
 }
