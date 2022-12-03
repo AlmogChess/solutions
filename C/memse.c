@@ -3,67 +3,49 @@
 
 #define WORD_SIZE sizeof(size_t)
 
-void SetChunk(char *buffer, int c);
+void SetChunk(unsigned char *buffer, int c);
 void *MemSet(void *dest, int c, size_t n);
 int IsAligned(void *s);
 
 void *MemSet(void *dest, int c, size_t n)
 {
     unsigned char *p_char = (unsigned char *)dest;
-    char buffer[8];
+    unsigned char buffer[8];
     unsigned char data = (unsigned char)c;
-    size_t i = 0;
     
-
     if (n > WORD_SIZE)
-    SetChunk(buffer, c);
-
-
-    puts("befre while  \n");
+    {
+        SetChunk(buffer, c);
+    }
 
     while(0 != n)
     {
         if((n > WORD_SIZE) && (1 == IsAligned(dest)))
         {
-            puts("im here \n");
             dest = buffer;
             n -= WORD_SIZE;
             dest += WORD_SIZE;
-            puts("im here\n");
         }
         else
         {
-            printf("else %ld\n", n);
-            *(unsigned char *)dest = c;
+            *(unsigned char *)dest = data;
             ++dest;
             --n; 
         }
     }
-/*
-    while((n > WORD_SIZE) && (1 == IsAligned(dest)))
-    {
-        puts("im here \n");
-        dest = buffer;
-        n -= WORD_SIZE;
-        dest += WORD_SIZE;
-    }
-
-    while(0 != n)
-    {
-        *p_char = c;
-        ++p_char;
-        --n;
-    }*/
 }
 
-void SetChunk(char *buffer, int c)
+void SetChunk(unsigned char *buffer, int c)
 {
     size_t i = 0;
+    unsigned char data = (unsigned char)c;
+
     for(i = 0; i < WORD_SIZE; ++i)
     {
-        *buffer = c;
+        *buffer = data;
+        ++buffer;
     }
-    puts("set chunk active\n");
+    printf("buffer ready %s!\n", buffer);
 }
 
 void WriteChunk (void *dest, void *src)
@@ -110,16 +92,34 @@ void *MemCpy(void *dest, const void *src, size_t n)
     }
 }
 
+
+void *MemMove(void *dest, const void *src, size_t n)
+{
+    /*start copy from the end, to avoid overlap*/
+    src += n - 1;
+    dest += n - 1;
+    while(0 != n)
+    {
+        /*cast to unsigned char and copy byte-byte*/
+        *(unsigned char *)dest = *(unsigned char *)src;
+        --src;
+        --dest;
+        --n;    
+    }
+}
+
+
 int main()
 {
   char src[11] = "almogalmog";
   char dest[18] = "12345671234512345";
-  /*
-  MemSet(dest, '$', 9);
-    */
-    MemCpy(dest, src, 9);
-  printf ("dest: %s\n", dest);
+  
 
+    
+MemMove(dest, src, 1);
+printf ("dest: %s\n", dest);
+MemSet(dest, '$', 8);
+printf ("dest: %s\n", dest);
   printf ("is IsAligned: %d\n", IsAligned(dest));
 
 
